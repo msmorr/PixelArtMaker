@@ -1,15 +1,26 @@
 body {
     text-align: center;
+    background-image: url("https://www.planwallpaper.com/static/images/Alien_Ink_2560X1600_Abstract_Background_1.jpg");
+      opacity: 1;
+      transition: 1s opacity;
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: none;
 }
 
 h1 {
-    font-family: Monoton;
+    font-family: Roboto;
     font-size: 70px;
     margin: 0.2em;
+    color: #ffffff;
 }
 
 h2 {
     margin: 1em 0 0.25em;
+    color: #ffffff;
+    font-family: Roboto;
 }
 
 h2:first-of-type {

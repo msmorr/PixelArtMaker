@@ -1,40 +1,59 @@
-var color = $( "#colorPicker" ).val();
-var mouseDown = 0;
-document.body.onmousedown = function() {
-  mouseDown = 1;
-};
-document.body.onmouseup = function() {
-  mouseDown = 0;
-};
+var grid = $("#pixelCanvas")
+var mouseDown = false
 
-$(document).ready(function() {
-  $("sizePicker").submit(function makeGrid(grid) {
-    $('table tr').remove();
-    var rows = $( '#inputHeight' ).val();
-    var columns = $( '#inputWeight' ).val();
-    for (var c = 1; columns; c++) {
-      $("pixelCanvas").append('<tr></tr>');
-      for (var r = 1; rows; r++) {
-        $("tr").last().append('<td></td>');
-      }
+//function for fade-in effect
+window.onload = function() {
+  $("body").removeClass("fade-out");
+}
+
+function makeGrid() {
+  //clear existing grid cells
+  grid.children().remove();
+  //sets the rows and columns to match the value user has entered
+  var rows = $("#inputHeight").val()
+  var cols = $("#inputWeight").val()
+  //for loop that builds the Grid
+  for (var r = 1; r <= rows; r++) {
+    var tr = $("<tr></tr>");
+    grid.append(tr);
+    for (var c = 1; c <= cols; c++) {
+      var td = $("<td></td>");
+      tr.append(td);
     }
-    $("pixelCanvas").css("border", "black")
-    grid.preventDefault();
-}));
+  }
+};
+//call makeGrid and prevent submit button from reloading the page
+$("#sizePicker").submit(function(event) {
+  event.preventDefault();
+  makeGrid();
+})
 
-// Select color input
-$("#colorPicker").on("change", function(){
-  var color = $("#colorPicker.val()")
-});
-
-//set color
-$("#pixelCanvas").on("click","td", function(){
-  var color = $("colorPicker.val()");
+// change the color of cells
+grid.on("mousedown", "tr td", function() {
+  var color = $("#colorPicker").val();
   $(this).css("background-color", color);
 });
 
-$("td").mouseenter(function(){
-  if(mouseDown){
-    $(this).css("background-color", colorPicker.value);
+// allow changing colors while mousdown and mousemove both true
+$(document).mousedown(function() {
+  mouseDown = true;
+});
+$(document).mouseup(function() {
+  mouseDown = false
+});
+grid.on("mouseover", "tr td", function() {
+  if(mouseDown) {
+    var color = $("#colorPicker").val();
+    $(this).css("background-color", color);
   }
+});
+
+//make a right-click act as an eraser
+grid.on("contextmenu", "tr td", function() {
+  $(this).css("background-color", "#fff");
+});
+
+//prevent the menu from appearing on right-click
+$("#pixelCanvas").on("contextmenu", function(event) {
+  event.preventDefault();
 });
